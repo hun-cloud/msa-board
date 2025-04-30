@@ -2,6 +2,7 @@ package msa.board.article.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import msa.board.article.service.response.ArticlePageResponse;
 import msa.board.article.service.response.ArticleResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
@@ -29,6 +30,15 @@ public class ArticleApiTest {
     void readTest() {
         ArticleResponse response = read(175804331282259968L);
         System.out.println("response = " + response);
+    }
+
+    @Test
+    void readAllTest() {
+        ArticlePageResponse response = restClient.get()
+                .uri("/v1/articles?boardId=1&pageSize=30&page=1")
+                .retrieve()
+                .body(ArticlePageResponse.class);
+        System.out.println("response.getArticleCount = " + response.getArticleCount());
     }
 
     ArticleResponse read(Long articleId) {

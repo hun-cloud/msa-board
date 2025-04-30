@@ -6,6 +6,7 @@ import msa.board.article.entity.Article;
 import msa.board.article.repository.ArticleRepository;
 import msa.board.article.service.request.ArticleCreateRequest;
 import msa.board.article.service.request.ArticleUpdateRequest;
+import msa.board.article.service.response.ArticlePageResponse;
 import msa.board.article.service.response.ArticleResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,5 +41,18 @@ public class ArticleService {
     @Transactional
     public void delete(Long articleId) {
         articleRepository.deleteById(articleId);
+    }
+
+    public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+        return ArticlePageResponse.of(
+                articleRepository.findAll(boardId, (page - 1) * pageSize, page)
+                        .stream()
+                        .map(ArticleResponse::from)
+                        .toList(),
+                articleRepository.count(
+                        boardId,
+                        PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)
+                )
+        );
     }
 }
