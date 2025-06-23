@@ -27,7 +27,7 @@ public class ArticleCreatedTimeRepository {
     }
 
     public void delete(Long articleId) {
-        redisTemplate.delete(generateKey(articleId));z
+        redisTemplate.delete(generateKey(articleId));
     }
 
     public LocalDateTime read(Long articleId) {
