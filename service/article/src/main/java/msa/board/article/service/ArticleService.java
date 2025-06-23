@@ -1,6 +1,6 @@
 package msa.board.article.service;
 
-import kuke.board.common.snowflake.Snowflake;
+import msa.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
 import msa.board.article.entity.Article;
 import msa.board.article.entity.BoardArticleCount;

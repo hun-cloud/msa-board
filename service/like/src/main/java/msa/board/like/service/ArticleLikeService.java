@@ -1,6 +1,6 @@
 package msa.board.like.service;
 
-import kuke.board.common.snowflake.Snowflake;
+import msa.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
 import msa.board.like.entity.ArticleLike;
 import msa.board.like.repository.ArticleLikeRepository;

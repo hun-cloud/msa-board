@@ -2,11 +2,10 @@ package msa.board.comment.api;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import kuke.board.common.snowflake.Snowflake;
+import msa.board.common.snowflake.Snowflake;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import msa.board.comment.entity.Comment;
-import msa.board.comment.repository.CommentRepository;
 import msa.board.comment.service.response.CommentResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
