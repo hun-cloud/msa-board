@@ -1,5 +1,8 @@
 package msa.board.comment.service;
 
+import msa.board.common.event.EventType;
+import msa.board.common.event.payload.CommentCreatedEventPayload;
+import msa.board.common.outboxmessagerelay.OutboxEventPublisher;
 import msa.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
 import msa.board.comment.entity.ArticleCommentCount;
@@ -18,6 +21,7 @@ import static java.util.function.Predicate.not;
 public class CommentServiceV2 {
     private final Snowflake snowflake = new Snowflake();
     private final CommentRepository commentRepository;
+    private final OutboxEventPublisher outboxEventPublisher;
     private final ArticleCommentCountRepository articleCommentCountRepository;
 
     @Transactional
@@ -39,6 +43,20 @@ public class CommentServiceV2 {
                     ArticleCommentCount.init(request.getArticleId(), 1L)
             );
         }
+
+        outboxEventPublisher.publish(
+                EventType.COMMENT_CREATED,
+                CommentCreatedEventPayload.builder()
+                        .commentId(comment.getCommentId())
+                        .content(comment.getContent())
+                        .articleId(comment.getArticleId())
+                        .writerId(comment.getWriterId())
+                        .deleted(comment.getDeleted())
+                        .createdAt(comment.getCreatedAt())
+                        .articleCommentCount(count(comment.getArticleId()))
+                        .build(),
+                comment.getArticleId()
+        );
 
         return CommentResponse.from(comment);
     }
@@ -68,6 +86,19 @@ public class CommentServiceV2 {
                     } else {
                         delete(comment);
                     }
+                    outboxEventPublisher.publish(
+                            EventType.COMMENT_DELETED,
+                            CommentCreatedEventPayload.builder()
+                                    .commentId(comment.getCommentId())
+                                    .content(comment.getContent())
+                                    .articleId(comment.getArticleId())
+                                    .writerId(comment.getWriterId())
+                                    .deleted(comment.getDeleted())
+                                    .createdAt(comment.getCreatedAt())
+                                    .articleCommentCount(count(comment.getArticleId()))
+                                    .build(),
+                            comment.getArticleId()
+                    );
                 });
     }
 

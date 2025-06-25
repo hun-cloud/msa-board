@@ -1,5 +1,7 @@
 package msa.board.like.service;
 
+import msa.board.common.outboxmessagerelay.OutboxEvent;
+import msa.board.common.outboxmessagerelay.OutboxEventPublisher;
 import msa.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
 import msa.board.like.entity.ArticleLike;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleLikeService {
     private final Snowflake snowflake = new Snowflake();
     private final ArticleLikeRepository articleLikeRepository;
+    private final OutboxEventPublisher outboxEventPublisher;
 
     public ArticleLikeResponse read(Long articleId, Long userId) {
         return articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
